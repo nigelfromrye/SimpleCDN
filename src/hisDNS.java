@@ -12,11 +12,11 @@ import java.net.*;
 /**
  * Created by nigel on 2018-03-29.
  */
-public class TCPServer extends Thread {
+public class hisDNS extends Thread {
     private String clientSentence, capatilizedSentence;
-    private final int port = 6789;
+    private final int port = 6788;
 
-    public TCPServer() {
+    public hisDNS() {
         this.clientSentence = "";
         this.capatilizedSentence = "";
     }
@@ -41,7 +41,7 @@ public class TCPServer extends Thread {
                 this.clientSentence = inFromClient.readLine();
                 System.out.println("Client sent: " + this.clientSentence);
 
-                this.capatilizedSentence = "hiscinema.com" + '\n';
+                this.capatilizedSentence = this.clientSentence.toUpperCase() + '\n';
 
                 System.out.println("Sending to client: " + this.capatilizedSentence);
                 outToClient.writeBytes(capatilizedSentence);

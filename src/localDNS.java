@@ -7,16 +7,21 @@ package cps706;
  * @author Daniel
  *
  */
+/**
+ * @author Daniel
+ *
+ */
+
 import java.io.*;
 import java.net.*;
 /**
  * Created by nigel on 2018-03-29.
  */
-public class TCPServer extends Thread {
+public class localDNS extends Thread {
     private String clientSentence, capatilizedSentence;
-    private final int port = 6789;
+    private final int port = 6788;
 
-    public TCPServer() {
+    public localDNS() {
         this.clientSentence = "";
         this.capatilizedSentence = "";
     }
@@ -41,7 +46,7 @@ public class TCPServer extends Thread {
                 this.clientSentence = inFromClient.readLine();
                 System.out.println("Client sent: " + this.clientSentence);
 
-                this.capatilizedSentence = "hiscinema.com" + '\n';
+                this.capatilizedSentence = "HISCINEMA.COM" + '\n';
 
                 System.out.println("Sending to client: " + this.capatilizedSentence);
                 outToClient.writeBytes(capatilizedSentence);
@@ -51,4 +56,3 @@ public class TCPServer extends Thread {
         }
     }
 }
-

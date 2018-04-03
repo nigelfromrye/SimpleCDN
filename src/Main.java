@@ -1,3 +1,12 @@
+/**
+ * 
+ */
+package cps706;
+
+/**
+ * @author Daniel
+ *
+ */
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -7,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
         TCPServer server = new TCPServer();
-        TCPClient client = new TCPClient("192.168.16.1", server.getPort());
+        TCPClient client = new TCPClient("192.168.0.12", server.getPort());
 
         Scanner sc = new Scanner(System.in);
 
@@ -18,7 +27,7 @@ public class Main {
             if(server.isAlive()) {
                 System.out.println("Enter a string");
                 String sentence = sc.nextLine();
-
+    
                 client.setSentence(sentence);
                 client.start();
                 sc.close();
@@ -29,3 +38,4 @@ public class Main {
         }
     }
 }
+

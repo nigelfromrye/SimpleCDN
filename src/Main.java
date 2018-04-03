@@ -25,6 +25,7 @@ public class Main {
             server.start();
 
             if(server.isAlive()) {
+            	//remove string input
                 System.out.println("Enter a string");
                 String sentence = sc.nextLine();
     

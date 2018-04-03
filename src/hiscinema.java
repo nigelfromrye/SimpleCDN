@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cps706;
+package assign;
 
 /**
  * @author Daniel
@@ -12,11 +12,11 @@ import java.net.*;
 /**
  * Created by nigel on 2018-03-29.
  */
-public class TCPServer extends Thread {
+public class hiscinema extends Thread {
     private String clientSentence, capatilizedSentence;
     private final int port = 6789;
 
-    public TCPServer() {
+    public hiscinema() {
         this.clientSentence = "";
         this.capatilizedSentence = "";
     }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cps706;
+package assign;
 
 /**
  * @author Daniel

@@ -1,11 +1,11 @@
 /**
  * 
  */
-package cps706;
+package assign;
 
 /**
  * @author Daniel
- * used with tcp connection final step
+ *
  */
 public class herCDN {
 

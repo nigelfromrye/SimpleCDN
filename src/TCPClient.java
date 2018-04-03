@@ -1,7 +1,10 @@
 /**
  * 
  */
-package cps706;
+/**
+ * 
+ */
+package assign;
 
 /**
  * @author Daniel
@@ -60,21 +63,27 @@ public class TCPClient extends Thread{
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getLocalHost(),6788);
             clientSocketLocal.send(sendPacket);
             
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             clientSocketLocal.receive(receivePacket);
+            ByteArrayInputStream baos = new ByteArrayInputStream(receiveData);
+            ObjectInputStream oos = new ObjectInputStream(baos);
+            data rec = (data)oos.readObject();
 
-
-            String modifiedSentence =
-            new String(receivePacket.getData());
-
-            System.out.println("FROM SERVER:" + modifiedSentence);
-            System.out.println("Client process finished");
+            rec.printer();
+            
+             System.out.println("Client process finished");
             clientSocketLocal.close();
+            
+            //final tcp connection
 
         } catch (IOException e) {
             System.out.println("Client Exception: " + e);
         }
+        catch(ClassNotFoundException e) {
+        	
+        }
     }
 }
+
 

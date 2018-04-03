@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cps706;
+package assign;
 
 /**
  * @author Daniel
@@ -15,7 +15,8 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        TCPServer server = new TCPServer();
+        hiscinema server = new hiscinema();
+        // ip is local host
         TCPClient client = new TCPClient("192.168.0.12", server.getPort());
 
         Scanner sc = new Scanner(System.in);
@@ -39,4 +40,3 @@ public class Main {
         }
     }
 }
-

@@ -1,30 +1,33 @@
-/**
- * 
- */
 package assign;
 
-/**
- * @author Daniel
- *
- */
+
 import java.io.*;
 import java.net.*;
+
 /**
- * Created by nigel on 2018-03-29.
+ * @author Daniel Gomez, Nigel Fernandes, Tenzin Kunhken
+ * first tcp connection
  */
 public class hiscinema extends Thread {
-    private String clientSentence, capatilizedSentence;
+    private String capatilizedSentence;
     private final int port = 6789;
 
+    /**
+     * constructor
+     */
     public hiscinema() {
-        this.clientSentence = "";
-        this.capatilizedSentence = "";
+        
     }
 
+    /**
+     * @return port number for client
+     */
     public int getPort() {
         return this.port;
     }
-
+    /*
+     * start server and return a string
+     */
     public void run() {
         try {
             System.out.println("Server started on port: " + this.port);
@@ -33,13 +36,10 @@ public class hiscinema extends Thread {
             while(true) {
                 Socket connectionSocket = welcomeSocket.accept();
                 System.out.println("Connection Accepted");
-
+                // no input at the moment
                 BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-
+                //output is name currently set in capatilized Sentance
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-
-                this.clientSentence = inFromClient.readLine();
-                System.out.println("Client sent: " + this.clientSentence);
 
                 this.capatilizedSentence = "hiscinema.com" + '\n';
 

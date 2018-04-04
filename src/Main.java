@@ -1,40 +1,32 @@
-/**
- * 
- */
 package assign;
 
-/**
- * @author Daniel
- *
- */
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-
+/**
+ * @author Daniel Gomez, Nigel Fernandes, Tenzin Kunhken
+ * Starting program
+ */
 public class Main {
 
+    /**
+     * Starts Client actions and first server, while waiting for final response
+     * @param args
+     */
     public static void main(String[] args) {
         hiscinema server = new hiscinema();
         // ip is local host
         TCPClient client = new TCPClient("192.168.0.12", server.getPort());
 
-        Scanner sc = new Scanner(System.in);
-
-
         try {
             server.start();
 
             if(server.isAlive()) {
-            	//remove string input
-                System.out.println("Enter a string");
-                String sentence = sc.nextLine();
-    
-                client.setSentence(sentence);
+            	System.out.println("Client starting"); 
                 client.start();
-                sc.close();
-
-            }
+               }
         } catch (Exception e) {
             System.out.println("Main Exception: " + e);
         }

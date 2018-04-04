@@ -6,15 +6,13 @@
  */
 package assign;
 
-/**
- * @author Daniel
- *
- */
 import java.io.*;
 import java.net.*;
 
 /**
- * Created by nigel on 2018-03-29.
+ * @author Daniel Gomez, Nigel Fernandes, Tenzin Kunhken
+ * contacts hiscinema and herCDN with tcp links
+ * gets information from localDNS
  */
 public class TCPClient extends Thread{
     private String host, sentence, modifiedSentence;
@@ -23,6 +21,11 @@ public class TCPClient extends Thread{
     private static byte[] receiveData = new byte[1024];
   
 
+    /**
+     * constructor
+     * @param host - ip address
+     * @param port - port number
+     */
     public TCPClient(String host, int port) {
         this.host = host;
         this.port = port;
@@ -31,10 +34,9 @@ public class TCPClient extends Thread{
         
     }
 
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
-    }
-
+    /* 
+     * start client 
+     */
     public void run() {
         try {
         	//start tcp connection with hiscinema
@@ -69,7 +71,7 @@ public class TCPClient extends Thread{
             ByteArrayInputStream baos = new ByteArrayInputStream(receiveData);
             ObjectInputStream oos = new ObjectInputStream(baos);
             data rec = (data)oos.readObject();
-
+            // print data info
             rec.printer();
             
              System.out.println("Client process finished");

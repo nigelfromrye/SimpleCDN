@@ -1,74 +1,53 @@
-package assign;
-
-import java.io.*;
-
+import javax.sound.midi.Soundbank;
+import javax.xml.transform.sax.SAXSource;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.*;
 import java.net.*;
-import java.util.ArrayList;
 
 /**
- * @author Daniel Gomez, Nigel Fernandes, Tenzin Kunhken
- * localDNS contacts hisDNS and herDNS with udp links
+ * Created by nigel on 2018-04-06.
  */
-public class localDNS extends Thread {
-    private final int port = 6788;
-    static byte[] receiveData;
-    static byte[] sendData;
-    static ArrayList<data> mem = new ArrayList<data>();
-    
-    /**
-     * Starts a memory list containing manditory info
-     * creates receiver and sender arrays
-     */
-    public localDNS() {
-    	receiveData = new byte[1024];
-    	 sendData= new byte[1024];
-    	 mem.add(new data("herCDN.com","NSherCDN.com","NS"));
-    	 mem.get(0).addLine("NSherCDN.com","IPher","A");
-    	 mem.add(new data("hiscinema.com","NShiscinema.com","NS"));
-    	 mem.get(0).addLine("NShiscinema.com","IPhis","A");
+public class LocalDNS extends DNS {
+    public LocalDNS() throws  Exception{
+        super(InetAddress.getLocalHost(),40370);
     }
 
-    /**
-     * @return port to client
-     */
-    public int getPort() {
-        return this.port;
-    }
-    /*
-     * start server and waits for response from client to search
-     */
-    public void run() {
-        try {
-            System.out.println("Server started on port: " + this.port);
-            //used to be able to use writeObject command which serializes objects
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            
-            DatagramSocket serverSocket = new DatagramSocket(this.port);
-            //remember to remove this
-            data example = new data("www.herCDN.com","192.168.0.12","A");
-            oos.writeObject(example);
-            oos.flush();
-            //data is now in byte array sendData
-            sendData= baos.toByteArray();
-                        
-            while(true) {
-            	DatagramPacket receivePacket =
-            			new DatagramPacket(receiveData, receiveData.length);
-            			serverSocket.receive(receivePacket);
-            			String sentence = new String(receivePacket.getData());
-            			InetAddress IPAddress = receivePacket.getAddress();
-            			int port = receivePacket.getPort();
-            			//perform a search of memory with sentance
-            			//then perform searchs in other servers
-            			//return info to client
-            		      DatagramPacket packet = new DatagramPacket(sendData, sendData.length, IPAddress, port);
-            		      serverSocket.send(packet);
-            			
-            			
-            }
-        } catch (IOException e) {
-            System.out.println("Server Exception: " + e);
+    public void processData(String data,DatagramPacket sender) {
+        System.out.println("processing data: " + data);
+        String[] args = data.split(": ");
+
+        String[] tempQuery = args[0].split("/");
+        String queryIP = tempQuery[0].trim();
+
+        String[] tempType = args[1].split(" ");
+        String type = tempType[1].trim();
+
+        DNSRecord result = findRecord(queryIP,type);
+        if(result != null) {
+            // check other dns 's
+            result.print();
+            byte[] resultToBytes = DNSRecord.serialize(result);
+            sendResponse(resultToBytes, sender.getAddress(), sender.getPort());
+        } else {
+            String na = "not found";
+            // now check other DNS's
+            sendResponse(na.toUpperCase().getBytes(),sender.getAddress(), sender.getPort());
         }
+    }
+
+
+    public static void main(String[] args) throws Exception{
+        LocalDNS dns = new LocalDNS();
+        dns.insertRecord("hiscinema.com","NShiscinema.com","NS",
+                new DNSRecord("NShiscinema.com","192.his","A",null));
+        dns.insertRecord("herCDN.com","NSherCDN.com","NS",
+                new DNSRecord("NSherCDN.com","192.her","A",null));
+        dns.insertRecord("video.hiscinema.com","herCDN.com","V",
+                new DNSRecord("herCDN.com","www.herCDN.com","CN",
+                        new DNSRecord("www.herCDN.com","192.vid.her","A",null)));
+        dns.run();
     }
 }
